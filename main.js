@@ -4,12 +4,20 @@ const supabaseKey = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZS
 const supabase = createClient(supabaseUrl, supabaseKey)
 
 
-
-let { data: Books, error } = await supabase
+async function loadBooks() {
+    let { data: Books, error } = await supabase
     .from('Books')
-    .select('*')
+    .select('*');
 
-for (let book of Books) {
-    let bookList = document.getElementById('booklist');
-    bookList.innerHTML += '<li>' + book.title + '8</li>';
+    if (error) {
+    console.error('Error fetching books:', error);
+    return;
+    }
+
+    const bookList = document.getElementById('booklist');
+    for (let book of Books) {
+    bookList.innerHTML += `<li>${book.title}</li>`;
+    }
 }
+
+loadBooks();
